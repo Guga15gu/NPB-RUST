@@ -3,15 +3,15 @@ const R46 :f64 = R23*R23;
 const T23 :f64 = 2.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0;
 const T46 :f64 = T23*T23;
 
-fn randlc(x: &mut f64, a: f64) -> f64{
+fn randlc(mut x: f64, a: f64) -> f64{
 
     let mut t1 :f64;
-    let t2 :f64;
+    let t2 :i32;
     let t3 :f64;
-    let t4 :f64;
+    let t4 :i32;
     let a1 :f64;
     let a2 :f64;
-    let x1 :f64;
+    let x1 :i32;
     let x2 :f64;
     let z :f64;
 
@@ -31,20 +31,21 @@ fn randlc(x: &mut f64, a: f64) -> f64{
 	 * X = 2^23 * Z + A2 * X2  (mod 2^46).
 	 * ---------------------------------------------------------------------
 	 */
-	t1 = R23 * *x;
-	x1 = (t1 as i32).into();
-	x2 = *x - T23 * x1;
-	t1 = a1 * x2 + a2 * x1;
-	t2 = ((R23 * t1) as i32).into();
-	z = t1 - T23 * t2;
+	t1 = R23 * x;
+	x1 = t1 as i32;
+	x2 = x - T23 * x1 as f64;
+	t1 = a1 * x2 + a2 * x1 as f64;
+	t2 = (R23 * t1) as i32;
+	z = t1 - T23 * t2 as f64;
 	t3 = T23 * z + a2 * x2;
-	t4 = ((R46 * t3) as i32).into();
-	*x = t3 - T46 * t4;
+	t4 = (R46 * t3) as i32;
+	x = t3 - T46 * t4 as f64;
 
-	R46 * *x
+	R46 * x
 
 }
 fn main(){
-
-    println!("{}",randlc(&mut 23534575.6565, 3242352352357.5645343));
+    let a: f64 = 3242352352357.5645343;
+    let x : f64 = 23534575.6565;
+    println!("{}",randlc(x, a));
 }
