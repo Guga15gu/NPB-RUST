@@ -22,10 +22,9 @@ use crate::timers::*;
 
 fn main() {
     
-    //= Vec::new();//
-    //let mut x : Vec<f64> = Vec::with_capacity(NK_PLUS as usize);
+    
     let mut x: Vec<f64> = vec!(0.0; NK_PLUS as usize);
-    //let mut q : Vec<f64> = Vec::with_capacity(NQ as usize);
+
     let mut q: Vec<f64> = vec!(0.0; NQ as usize);
 	let q = Mutex::new(q);
     let mut mops:f64;
@@ -36,8 +35,6 @@ fn main() {
     let mut x1	:f64;
     let mut x2	:f64;
 
-    //let mut sx	:f64;
-    //let mut sy	:f64;
     let tm	:f64;
     let an	:f64;
     let tt	:f64;
@@ -50,7 +47,6 @@ fn main() {
     
     let np :i32;
 
-    //let mut i :usize;
     let mut ik :i32;
     let mut kk :i32;
     let mut l :i32;
@@ -137,8 +133,6 @@ fn main() {
     an = t1;
 	tt = S;
 	gc = 0.0;
-	//sx = 0.0;
-	//sy = 0.0;
 
     for i in 0..NQ as usize {
 		let mut q = q.lock().unwrap(); // this may be a sequential bottleneck
@@ -160,26 +154,21 @@ fn main() {
 
 	let (testex, testey): (Vec<_>, Vec<_>) /*Vec<( f64, f64)> */  = iterator.map(
 		| k | {
-		//|(sx, sy)| {
+
 			let mut sx =0.0;
 			let mut sy =0.0; 
-			//double t1, t2, t3, t4, x1, x2;
+
 			let mut t1	:f64;
 			let mut t2	:f64;
 			let mut t3	:f64;
 			let mut t4	:f64;
 			let mut x1	:f64;
 			let mut x2	:f64;
-			//int kk, i, ik, l;
+
 			let mut ik :i32;
 			let mut kk :i32;
 			let mut l :i32;
-			//let mut k :i32;
-			//let mut i :i32;
-			//double qq[NQ];		/* private copy of q[0:NQ-1] */
-			//for (i = 0; i < NQ; i++) qq[i] = 0.0;
-			//let mut qq: Vec<f64> = q.clone();
-			//double x[NK_PLUS];
+			
 			let mut x: Vec<f64> = vec!(0.0; NK_PLUS as usize);
 
 			//*/
@@ -187,114 +176,11 @@ fn main() {
 			let mut qq: Vec<f64> = q.lock().unwrap().clone();// this may be a sequential bottleneck
 			//#pragma omp for reduction(+:sx,sy)
 			//for k in 1..np+1 {
-				kk = k_offset + *k;
-				t1 = S;
-				t2 = an;
-
-				/* find starting seed t1 for this kk */
-				for _i in 1..101 {
-					ik = kk / 2;
-					if (2*ik)!=kk{
-						t3=randlc(&mut t1,t2);
-					}
-					if ik==0{
-						break;
-					}
-					t2_2 = t2;
-					t3=randlc(&mut t2,t2_2);
-					kk=ik;
-				}
-
-				/* compute uniform pseudorandom numbers */
-				//if timers_enabled {timer_start(2, &mut start);}
-				vranlc(2*NK as usize, &mut t1, A, &mut x);
-				//if timers_enabled {timer_stop(2, &mut start, &mut elapsed);}
-				
-				/*
-				* compute gaussian deviates by acceptance-rejection method and
-				* tally counts in concentric square annuli. this loop is not
-				* vectorizable.
-				*/
-
-				//if timers_enabled {timer_start(1, &mut start);}
-				
-				for i in 0..NK {
-					x1 = 2.0 * x[2*i as usize] - 1.0;
-					x2 = 2.0 * x[(2*i+1) as usize] - 1.0;
-					t1 = x1*x1 + x2*x2;
-					if t1 <= 1.0{
-						t2 = (-2.0 * t1.ln() / t1).sqrt();
-						t3 = x1 * t2;
-						t4 = x2 * t2;
-						l = (t3.abs()).max(t4.abs()) as i32;
-						qq[l as usize] += 1.0;
-						sx = sx + t3;
-						sy = sy + t4;
-					}
-				}
-				//if timers_enabled{timer_stop(1, &mut start, &mut elapsed);}
-			//}
-			
-			/* 
-			#pragma omp critical 
-			//Restricts execution of the associated structured block to a
-			//single thread at a time.
-			{
-				for (i = 0; i <= NQ - 1; i++) q[i] += qq[i];
-			}
-			*/
-			let mut q = q.lock().unwrap();
-			for i in 0..NQ {
-				q[i as usize] += qq[i as usize];
-			}
-			(sx, sy)
-		}
-	).unzip();//.collect();
-
-	let sx: f64 = testex.par_iter().sum();
-	let sy: f64 = testey.par_iter().sum();
-	//let q = testeq.par_iter();
-	//let (testex, testey): (Vec<_>, Vec<_>) = iterator.into_iter().unzip();
-	//iterator.
-	//ideia
-
-
-	
-	//#pragma omp parallel
-	//{
-	/*
-	let mut closure = || {
-
-		//
-		//double t1, t2, t3, t4, x1, x2;
-		let mut t1	:f64;
-		let mut t2	:f64;
-		let mut t3	:f64;
-		let mut t4	:f64;
-		let mut x1	:f64;
-		let mut x2	:f64;
-		//int kk, i, ik, l;
-		let mut ik :i32;
-		let mut kk :i32;
-		let mut l :i32;
-		let mut k :i32;
-		let mut i :i32;
-		//double qq[NQ];		/* private copy of q[0:NQ-1] */
-		//for (i = 0; i < NQ; i++) qq[i] = 0.0;
-		let mut qq: Vec<f64> = q.clone();
-		//double x[NK_PLUS];
-		let mut x: Vec<f64> = vec!(0.0; NK_PLUS as usize);
-
-		//
-		let mut t2_2: f64;
-		let mut qq: Vec<f64> = q.clone();
-		//#pragma omp for reduction(+:sx,sy)
-		for k in 1..np+1 {
-			kk = k_offset + k;
+			kk = k_offset + *k;
 			t1 = S;
 			t2 = an;
 
-			// find starting seed t1 for this kk 
+			/* find starting seed t1 for this kk */
 			for _i in 1..101 {
 				ik = kk / 2;
 				if (2*ik)!=kk{
@@ -308,18 +194,18 @@ fn main() {
 				kk=ik;
 			}
 
-			// compute uniform pseudorandom numbers 
-			if timers_enabled {timer_start(2, &mut start);}
+			/* compute uniform pseudorandom numbers */
+			//if timers_enabled {timer_start(2, &mut start);}
 			vranlc(2*NK as usize, &mut t1, A, &mut x);
-			if timers_enabled {timer_stop(2, &mut start, &mut elapsed);}
+			//if timers_enabled {timer_stop(2, &mut start, &mut elapsed);}
 			
-			
-			//compute gaussian deviates by acceptance-rejection method and
-			//tally counts in concentric square annuli. this loop is not
-			//vectorizable.
-			
+			/*
+			* compute gaussian deviates by acceptance-rejection method and
+			* tally counts in concentric square annuli. this loop is not
+			* vectorizable.
+			*/
 
-			if timers_enabled {timer_start(1, &mut start);}
+			//if timers_enabled {timer_start(1, &mut start);}
 			
 			for i in 0..NK {
 				x1 = 2.0 * x[2*i as usize] - 1.0;
@@ -335,26 +221,25 @@ fn main() {
 					sy = sy + t4;
 				}
 			}
-			if timers_enabled{timer_stop(1, &mut start, &mut elapsed);}
+			//if timers_enabled{timer_stop(1, &mut start, &mut elapsed);}
+			//}
+			
+			/* 
+			#pragma omp critical 
+			//Restricts execution of the associated structured block to a
+			//single thread at a time.
+			*/
+			let mut q = q.lock().unwrap();
+			for i in 0..NQ {
+				q[i as usize] += qq[i as usize];
+			}
+			(sx, sy)
 		}
-		
-		/* 
-		#pragma omp critical 
-		//Restricts execution of the associated structured block to a
-		//single thread at a time.
-		{
-			for (i = 0; i <= NQ - 1; i++) q[i] += qq[i];
-		}
-		*/
-		for i in 0..(NQ as usize) -1 {
-			q[i] += qq[i];
-		}
+	).unzip();//.collect();
 
-	};
-	//} end of parallel region
-	closure();
-
-	*/
+	let sx: f64 = testex.par_iter().sum();
+	let sy: f64 = testey.par_iter().sum();
+	//ideia
 
 	let q = q.lock().unwrap();
     for i in 0..NQ as usize {
