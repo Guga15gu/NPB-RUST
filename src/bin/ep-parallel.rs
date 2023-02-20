@@ -171,11 +171,10 @@ fn main() {
 			
 			let mut x: Vec<f64> = vec!(0.0; NK_PLUS as usize);
 
-			//*/
+	
 			let mut t2_2: f64;
-			let mut qq: Vec<f64> = q.lock().unwrap().clone();// this may be a sequential bottleneck
-			//#pragma omp for reduction(+:sx,sy)
-			//for k in 1..np+1 {
+			let mut qq: Vec<f64> = vec!(0.0; NQ as usize);
+			
 			kk = k_offset + *k;
 			t1 = S;
 			t2 = an;
@@ -231,7 +230,7 @@ fn main() {
 			*/
 			let mut q = q.lock().unwrap();
 			for i in 0..NQ {
-				q[i as usize] += qq[i as usize];
+				q[i as usize] =  q[i as usize] + qq[i as usize];
 			}
 			(sx, sy)
 		}
@@ -295,7 +294,7 @@ fn main() {
 	print!(" Counts: \n");
     
 	for i in 0..(NQ-1) as usize {
-		print!("{}d{}f\n", i, q[i]);
+		print!("{}\t{}\n", i, q[i]);
 	}
 
     print!(" Verified: {} \n", verified);
