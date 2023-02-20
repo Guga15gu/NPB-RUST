@@ -251,7 +251,7 @@ fn main() {
 	print!(" Counts: \n");
     
 	for i in 0..(NQ-1) as usize {
-		print!("{}d{}f\n", i, q[i]);
+		print!("{}\t{}\n", i, q[i]);
 	}
 
     print!(" Verified: {} \n", verified);
