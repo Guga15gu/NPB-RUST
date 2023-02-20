@@ -11,8 +11,12 @@ const	S : f64 = 271828183.0;
 const NK_PLUS: i32 = 2*NK+1;
 
 pub mod randdp;
-use crate::randdp::*;
+pub mod timers;
+use std::time::Duration;
+use std::time::Instant;
 
+use crate::randdp::*;
+use crate::timers::*;
 
 fn main() {
     
@@ -31,7 +35,7 @@ fn main() {
 
     let mut sx	:f64;
     let mut sy	:f64;
-    let mut tm	:f64;
+    let tm	:f64;
     let an	:f64;
     let tt	:f64;
     let mut gc	:f64;
@@ -54,7 +58,7 @@ fn main() {
     let mut j :i32;
 
     let mut verified :bool;
-    let mut timers_enabled :bool;
+    let timers_enabled :bool;
     
     //let mut dum = [1.0, 1.0, 1.0];
     let dum: Vec<f64> = [1.0, 1.0, 1.0].to_vec();
@@ -67,7 +71,10 @@ fn main() {
 	//	timers_enabled = TRUE;
 	//	fclose(fp);
 	//}
-    
+	timers_enabled = true;
+
+    let mut start: [Instant; 64] = [Instant::now(); 64];
+    let mut elapsed: [Duration; 64] = [Duration::ZERO; 64];
     /*
 	 * --------------------------------------------------------------------
 	 * because the size of the problem is too large to store in a 32-bit
@@ -109,7 +116,7 @@ fn main() {
     //timer_clear(0);
 	//timer_clear(1);
 	//timer_clear(2);
-	//timer_start(0);
+	timer_start(0, &mut start);
     
     t1 = A;
     vranlc(0, &mut t1, A, &mut x);
@@ -162,9 +169,9 @@ fn main() {
         }
 
         /* compute uniform pseudorandom numbers */
-        //if(timers_enabled){timer_start(2);}
+        if timers_enabled {timer_start(2, &mut start);}
 		vranlc(2*NK as usize, &mut t1, A, &mut x);
-		//if(timers_enabled){timer_stop(2);}
+		if timers_enabled {timer_stop(2, &mut start, &mut elapsed);}
         
         /*
 		 * compute gaussian deviates by acceptance-rejection method and
@@ -172,7 +179,7 @@ fn main() {
 		 * vectorizable.
 		 */
 
-        //if(timers_enabled){timer_start(1);}
+        if timers_enabled {timer_start(1, &mut start);}
         
         for i in 0..NK {
 			x1 = 2.0 * x[2*i as usize] - 1.0;
@@ -188,15 +195,15 @@ fn main() {
 				sy = sy + t4;
 			}
 		}
-		//if(timers_enabled){timer_stop(1);}
+		if timers_enabled {timer_stop(1, &mut start, &mut elapsed);}
     }
     
     for i in 0..NQ as usize {
 		gc = gc + q[i];
 	}
     
-	//timer_stop(0);
-	//tm = timer_read(0);
+	timer_stop(0, &mut start, &mut elapsed);
+	tm = timer_read(0, &mut elapsed).as_secs_f64();
 
 	nit = 0;
 	verified = true;
@@ -235,7 +242,7 @@ fn main() {
     
 	//mops = f64::powi(2.0, M+1)/tm/1000000.0;
     print!("\n EP Benchmark Results:\n\n");
-	//print!(" CPU Time ={%10.4f}\n", tm);
+	print!(" CPU Time ={}\n", tm);
 	
     print!(" N = 2^{}\n", M);
 	print!(" No. Gaussian Pairs = {}\n", gc);
