@@ -79,26 +79,30 @@ type IntType = i64;
 #[cfg(not(CLASS = "D"))]
 type IntType = i32;
 
+pub mod randdp;
+pub mod timers;
+use crate::randdp::*;
+use crate::timers::*;
 ///*
-pub fn create_seq(seed: f64, an:f64){
+fn create_seq(seed: f64, an:f64){
 
     //#pragma omp parallel
 	{
 		let x :f64;
         let s :f64;
 
-		let i :i32;
-        let k :i32;
+		let i :IntType;
+        let k :IntType;
 
-		let k1 :i32;
-        let mut k2 :i32;
+		let k1 :IntType;
+        let mut k2 :IntType;
 		
         //pra que isso?
         //double an = a;
 		let myid :i32 = 0;
         let num_procs :i32 = 1;
 
-		let mq :i32;
+		let mq :IntType;
 
 		//myid = omp_get_thread_num();
 		//num_procs = omp_get_num_threads();
@@ -128,6 +132,43 @@ pub fn create_seq(seed: f64, an:f64){
     */
 	} /*omp parallel*/
     
+}
+
+fn find_my_seed(kn: i32, np: i32, nn: i64, s:f64, a: f64) -> f64{
+    let mut t1 :f64;
+    let mut t2 :f64;
+    let mq :i64;
+    let nq :i64;
+    let mut kk :i64;
+    let mut ik :i64;
+
+    if kn == 0 {
+        return s;
+    } 
+
+    mq = (((nn as f64)/4.0 + (np as f64) - 1.0) / (np as f64)).abs() as i64;
+	nq = ((mq as f64) * 4.0 * (kn as f64)).abs() as i64; /* number of rans to be skipped */
+
+    t1 = s;
+	t2 = a;
+	kk = nq;
+
+    while kk > 1 {
+		ik = kk / 2;
+		if 2 * ik ==  kk {
+            let t2_copy = t2;
+			randlc( &mut t2, t2_copy);
+			kk = ik;
+		}
+		else{
+			randlc( &mut t1, t2 );
+			kk = kk - 1;
+		}
+	}
+
+    randlc( &mut t1, t2 );
+
+    t1
 }
 //*/
 fn main() {
