@@ -7,7 +7,7 @@ const USE_BUCKETS       :bool = true;
 
 //#[cfg (not(CLASS))]
 //const CLASS :String = "S".to_string();
-
+/* 
 #[cfg(feature = "class_S")]
 const TOTAL_KEYS_LOG_2:       i32 = 16;
 #[cfg(feature = "class_S")]
@@ -70,9 +70,19 @@ const NUM_BUCKETS:              i32 = 1 << NUM_BUCKETS_LOG_2;
 const NUM_KEYS:                 i32 = TOTAL_KEYS;
 #[cfg(feature = "CLASS")]
 const SIZE_OF_BUFFERS:          i32 = NUM_KEYS;
+*/
 
+const TOTAL_KEYS_LOG_2:       i32 = 16;
+const MAX_KEY_LOG_2:          i32 = 11;
+const NUM_BUCKETS_LOG_2:      i32 = 9;
+const TOTAL_KEYS: i32 = 1 << TOTAL_KEYS_LOG_2;
 const MAX_ITERATIONS:i32 = 10;
 const TEST_ARRAY_SIZE:i32 = 5;
+
+const MAX_KEY:                  i32 = 1 << MAX_KEY_LOG_2;
+const NUM_BUCKETS:              i32 = 1 << NUM_BUCKETS_LOG_2;
+const NUM_KEYS:                 i32 = TOTAL_KEYS;
+const SIZE_OF_BUFFERS:          i32 = NUM_KEYS;
 
 #[cfg(CLASS = "D")]
 type IntType = i64;
@@ -83,13 +93,37 @@ pub mod randdp;
 pub mod timers;
 use crate::randdp::*;
 use crate::timers::*;
-///*
-fn create_seq(seed: f64, an:f64){
 
+use rayon::prelude::*;
+use rayon::current_num_threads;
+///*
+//#[cfg(feature = "CLASS")]
+fn create_seq(seed: f64, an:f64, v: &mut Vec<IntType>){
+
+    let num_threads = current_num_threads();
+    let num_procs = num_threads as i32;
+
+    //Aqui irei apenas dividir o vetor em um pra cada thread,
+    //assim o compilador entende que tá tudo certo com os acessos
+    //em caso de divisao n exata, um chunk extra vai ser criado
+    //o que vai ser uma iteracao a mais, seria bom juntar com a última...
+    /* 
+    let mq :IntType;
+    mq = (NUM_KEYS + num_procs - 1) / num_procs;
+    k1 = mq * myid;
+    k2 = k1 + mq;
+    if k2 > NUM_KEYS{
+        k2 = NUM_KEYS;
+    } 
+    */
+    //let key_arrays = v.chunks_mut(num_threads);
+    //let ideia : Vec<i32> = (0..num_threads as i32).collect();
+
+	let iterator = v.par_chunks_mut(num_threads).enumerate().for_each(| (myid, key_array)|
     //#pragma omp parallel
 	{
-		let x :f64;
-        let s :f64;
+		let mut x :f64 = 0.0;
+        let mut s :f64;
 
 		let i :IntType;
         let k :IntType;
@@ -99,38 +133,29 @@ fn create_seq(seed: f64, an:f64){
 		
         //pra que isso?
         //double an = a;
-		let myid :i32 = 0;
-        let num_procs :i32 = 1;
-
-		let mq :IntType;
-
-		//myid = omp_get_thread_num();
-		//num_procs = omp_get_num_threads();
-
-		mq = (NUM_KEYS + num_procs - 1) / num_procs;
-		k1 = mq * myid;
-		k2 = k1 + mq;
-		if k2 > NUM_KEYS{
-            k2 = NUM_KEYS;
-        } 
-        /* 
-		s = find_my_seed( myid, 
+		
+        
+		s = find_my_seed( myid as i32, 
 				num_procs,
-				(long)4*NUM_KEYS,
+	            4*(NUM_KEYS as i64),
 				seed,
 				an );
 
 		k = MAX_KEY/4;
+        
+		//for(i=k1; i<k2; i++){
+        //for i in k1..k2{
+        key_array.iter_mut().for_each(|pos|{
+            x = randlc(&mut s, an);
+			x += randlc(&mut s, an);
+			x += randlc(&mut s, an);
+			x += randlc(&mut s, an);
+            *pos = k * (x as i32);
+			//key_array[i as usize] = k * x as i32;
+        });
+			
 
-		for(i=k1; i<k2; i++){
-			x = randlc(&s, an);
-			x += randlc(&s, an);
-			x += randlc(&s, an);
-			x += randlc(&s, an);
-			key_array[i] = k*x;
-		}
-    */
-	} /*omp parallel*/
+	}); /*omp parallel*/
     
 }
 
@@ -173,5 +198,16 @@ fn find_my_seed(kn: i32, np: i32, nn: i64, s:f64, a: f64) -> f64{
 //*/
 fn main() {
 
-    create_seq(3.5, 1.2);
+    let mut key_array: Vec<IntType> = vec![0; SIZE_OF_BUFFERS as usize];
+    let mut key_buff1: Vec<IntType>;
+    let mut key_buff2: Vec<IntType>;
+    let mut partial_verify_vals: Vec<IntType>;
+    let mut key_buff1_aptr: Vec<IntType>;
+
+    //#[cfg(feature = "CLASS")]
+    create_seq(314159265.00, 1220703125.00, &mut key_array);
+
+    key_array.iter().for_each(|x|{
+        println!("{}", *x);
+    })
 }
