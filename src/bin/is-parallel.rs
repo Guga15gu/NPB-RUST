@@ -98,7 +98,7 @@ use rayon::prelude::*;
 use rayon::current_num_threads;
 ///*
 //#[cfg(feature = "CLASS")]
-fn create_seq(seed: f64, an:f64, v: &mut Vec<IntType>){
+fn create_seq(seed: f64, a:f64, v: &mut Vec<IntType>){
 
     let num_threads = current_num_threads();
     let num_procs = num_threads as i32;
@@ -107,9 +107,10 @@ fn create_seq(seed: f64, an:f64, v: &mut Vec<IntType>){
     //assim o compilador entende que tá tudo certo com os acessos
     //em caso de divisao n exata, um chunk extra vai ser criado
     //o que vai ser uma iteracao a mais, seria bom juntar com a última...
-    /* 
+    
     let mq :IntType;
     mq = (NUM_KEYS + num_procs - 1) / num_procs;
+    /* 
     k1 = mq * myid;
     k2 = k1 + mq;
     if k2 > NUM_KEYS{
@@ -119,7 +120,7 @@ fn create_seq(seed: f64, an:f64, v: &mut Vec<IntType>){
     //let key_arrays = v.chunks_mut(num_threads);
     //let ideia : Vec<i32> = (0..num_threads as i32).collect();
 
-	let iterator = v.par_chunks_mut(num_threads).enumerate().for_each(| (myid, key_array)|
+	let iterator = v.par_chunks_mut(mq as usize).enumerate().for_each(| (myid, key_array)|
     //#pragma omp parallel
 	{
 		let mut x :f64 = 0.0;
@@ -132,7 +133,7 @@ fn create_seq(seed: f64, an:f64, v: &mut Vec<IntType>){
         let mut k2 :IntType;
 		
         //pra que isso?
-        //double an = a;
+        let an = a;
 		
         
 		s = find_my_seed( myid as i32, 
@@ -140,7 +141,8 @@ fn create_seq(seed: f64, an:f64, v: &mut Vec<IntType>){
 	            4*(NUM_KEYS as i64),
 				seed,
 				an );
-
+        
+        //println!("{} s", s);
 		k = MAX_KEY/4;
         
 		//for(i=k1; i<k2; i++){
@@ -150,7 +152,11 @@ fn create_seq(seed: f64, an:f64, v: &mut Vec<IntType>){
 			x += randlc(&mut s, an);
 			x += randlc(&mut s, an);
 			x += randlc(&mut s, an);
-            *pos = k * (x as i32);
+            //println!("{} x", x);
+            //println!("{} k", k);
+            //println!("{} k*x", ((k as f64) * x ) as i32);
+            *pos = ((k as f64) * x ) as i32;
+            //println!("{} key_array", *pos);
 			//key_array[i as usize] = k * x as i32;
         });
 			
@@ -207,7 +213,14 @@ fn main() {
     //#[cfg(feature = "CLASS")]
     create_seq(314159265.00, 1220703125.00, &mut key_array);
 
+    key_array.iter().enumerate().for_each(|(i, pos)|{
+        println!("{}: {}", i, pos);
+    })
+    //let result = find_my_seed(7, 12, 20, 3534.43534, 3244123.234234);
+    //println!("{}", result);
+    /* 
     key_array.iter().for_each(|x|{
         println!("{}", *x);
     })
+    */
 }
