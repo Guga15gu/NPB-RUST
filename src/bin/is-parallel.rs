@@ -243,7 +243,13 @@ fn alloc_key_buff() -> (Vec<Vec<IntType>>, Vec<IntType>) {
     (bucket_size, key_buff2)
 }
 
-fn rank(iteration: i32, key_array: &mut Vec<IntType>, partial_verify_vals: &mut Vec<IntType> ){
+fn rank(iteration: i32, 
+        key_array: &mut Vec<IntType>, 
+        partial_verify_vals: &mut Vec<IntType>,
+        key_buff2: Vec<IntType>,
+        key_buff1: Vec<IntType> ){ubu3478
+            
+    
     let i :IntType;
     let k :IntType;
 
@@ -262,21 +268,14 @@ fn rank(iteration: i32, key_array: &mut Vec<IntType>, partial_verify_vals: &mut 
         partial_verify_vals[i] = key_array[test_index_array[i] as usize];
     }
     
-    /* 
-
-    #ifdef USE_BUCKETS
+    
     key_buff_ptr2 = key_buff2;
-    #else
-    key_buff_ptr2 = key_array;
-    #endif
     key_buff_ptr = key_buff1;
 
 
-    /* Bucket sort is known to improve cache performance on some */
-    /* cache based systems.  But the actual performance may depend */
-    /* on cache size, problem size. */
-    #ifdef USE_BUCKETS
-    #pragma omp parallel private(i, k)
+    //#pragma omp parallel private(i, k)
+    
+    /*
     {
         INT_TYPE *work_buff, m, k1, k2;
 
@@ -348,27 +347,7 @@ fn rank(iteration: i32, key_array: &mut Vec<IntType>, partial_verify_vals: &mut 
                 key_buff_ptr[k] += key_buff_ptr[k-1];
         }
     }
-    #else /*USE_BUCKETS*/
-    work_buff = key_buff1_aptr[myid];
-    /* Clear the work array */
-    for( i=0; i<MAX_KEY; i++ )
-        work_buff[i] = 0;
-    /* Ranking of all keys occurs in this section: */
-    /* In this section, the keys themselves are used as their */
-    /* own indexes to determine how many of each there are: their */
-    /* individual population */
-    for( i=0; i<NUM_KEYS; i++ )
-        work_buff[key_buff_ptr2[i]]++; /* Now they have individual key population */
-    /* To obtain ranks of each key, successively add the individual key population */
-    for( i=0; i<MAX_KEY-1; i++ )   
-        work_buff[i+1] += work_buff[i];
-    /* Accumulate the global key population */
-    for( k=1; k<num_procs; k++ ){
-        for( i=0; i<MAX_KEY; i++ )
-            key_buff_ptr[i] += key_buff1_aptr[k][i];
-    }
-    #endif /*USE_BUCKETS*/  
-
+    
     /* This is the partial verify test section */
     /* Observe that test_rank_array vals are */
     /* shifted differently for different cases */
@@ -497,8 +476,8 @@ fn rank(iteration: i32, key_array: &mut Vec<IntType>, partial_verify_vals: &mut 
 fn main() {
 
     let mut key_array: Vec<IntType> = vec![0; SIZE_OF_BUFFERS as usize];
-    let mut key_buff1: Vec<IntType>;
-    let mut key_buff2: Vec<IntType>;
+    let mut key_buff1: Vec<IntType> = vec![0; MAX_KEY as usize];
+    let mut key_buff2: Vec<IntType> = vec![0; SIZE_OF_BUFFERS as usize];
     let mut partial_verify_vals: Vec<IntType>;
     let mut key_buff1_aptr: Vec<IntType>;
 
