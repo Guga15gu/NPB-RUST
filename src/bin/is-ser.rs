@@ -306,8 +306,8 @@ fn rank<'a> (iteration: i32,
         bucket_size: &mut Vec<Vec<IntType>>,
         bucket_ptrs: &mut Vec<IntType>,
         test_index_array: [IntType; 5],
-        test_rank_array: [IntType; 5]) -> i32
-        /*mut key_buff_ptr_global: &'a mut Vec<IntType>)*/{
+        test_rank_array: [IntType; 5],
+        key_buff_ptr_global: &mut Vec<IntType>) -> i32 {
             
     let i :IntType;
     let mut k :IntType;
@@ -543,7 +543,7 @@ fn rank<'a> (iteration: i32,
     /* in rank are local; making them global slows down the code, probably */
     /* since they cannot be made register by compiler */
     if iteration == MAX_ITERATIONS {
-        //key_buff_ptr_global =  &mut key_buff_ptr;
+        *key_buff_ptr_global = key_buff_ptr.clone();
     }
     passed_verification
 }
@@ -625,16 +625,15 @@ fn main() {
         /*&mut key_buff_ptr_global */
         );  
     */
-    let mut passed;
     timer_start(0, &mut start);
     
     
     for i in 1..MAX_ITERATIONS+1 {
         iteration = i;
 		//if CLASS != 'S'{
-            print!("        {}", iteration);
+            //println!("        {}", iteration);
         //}
-		passed = rank( iteration, 
+		passed_verification += rank( iteration, 
             &mut key_array, 
             &mut partial_verify_vals,
             &mut key_buff2,
@@ -643,36 +642,32 @@ fn main() {
             &mut bucket_ptrs,
             test_index_array,
             test_rank_array,
-            /*&mut key_buff_ptr_global*/
+            &mut key_buff_ptr_global
             );
-        println!(", passed: {}", passed);
+        //println!(", passed: {}", passed_verification);
 	}
 
     timer_stop(0, &mut start, &mut elapsed);
 	tm = timer_read(0, &mut elapsed).as_secs_f64();
     
-    /*
+    
     full_verify(&mut bucket_ptrs, 
         &mut key_array, 
         &mut passed_verification,
         &mut key_buff_ptr_global,
-        &key_buff2);
-     */
+        &key_buff2
+    );
+        
+    //println!(", passed before if: {}", passed_verification);
     if passed_verification != 5*MAX_ITERATIONS + 1{
         passed_verification = 0;
     }
-    println!("full_verification: {}", passed_verification);
-    /* 
-    key_array.iter().enumerate().for_each(|(i, pos)|{
-        println!("{}: {}", i, pos);
-    });
-    */
-    print!(" CPU Time ={}\n", tm);
-    //let result = find_my_seed(7, 12, 20, 3534.43534, 3244123.234234);
-    //println!("{}", result);
-    /* 
-    key_array.iter().for_each(|x|{
-        println!("{}", *x);
-    })
-    */
+    else{
+        println!("full_verification: SUCCESSFUL");
+    }
+    //println!("full_verification: {}", passed_verification);
+    
+    print!("CPU Time ={}\n", tm);
+
+   
 }
