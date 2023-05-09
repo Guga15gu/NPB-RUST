@@ -58,7 +58,7 @@ fn main() {
     let mut x: Vec<f64> = vec!(0.0; NK_PLUS as usize);
     //let mut q : Vec<f64> = Vec::with_capacity(NQ as usize);
     let mut q: Vec<f64> = vec!(0.0; NQ as usize);
-    let mut mops:f64;
+    let mut _mops:f64;
     let mut t1	:f64;
     let mut t2	:f64;
     let mut t3	:f64;
@@ -84,17 +84,17 @@ fn main() {
     let mut ik :i32;
     let mut kk :i32;
     let mut l :i32;
-    let mut k :i32;
+    let mut _k :i32;
     let nit :i32;
 
     let k_offset :i32;
-    let mut j :i32;
+    let mut _j :i32;
 
     let mut verified :bool;
     let timers_enabled :bool;
     
     //let mut dum = [1.0, 1.0, 1.0];
-    let dum: Vec<f64> = [1.0, 1.0, 1.0].to_vec();
+    let _dum: Vec<f64> = [1.0, 1.0, 1.0].to_vec();
     //char    size[16];
 
 	//FILE* fp;
