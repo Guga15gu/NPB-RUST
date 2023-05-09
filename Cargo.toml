@@ -9,10 +9,10 @@ edition = "2021"
 rayon = "1.6.1"
 
 [features]
-class_S = ["CLASS"]
-class_W = ["CLASS"]
-class_A = ["CLASS"]
-class_B = ["CLASS"]
-class_C = ["CLASS"]
-class_D = ["CLASS"]
+S = ["CLASS"]
+W = ["CLASS"]
+A = ["CLASS"]
+B = ["CLASS"]
+C = ["CLASS"]
+D = ["CLASS"]
 CLASS = []

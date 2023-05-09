@@ -1,11 +1,37 @@
-///M from CLASS - npbparams
+#[cfg(feature = "S")]
+const CLASS: char = 'S';
+#[cfg(feature = "S")]
 const   M : i32 = 24; //class S
-//const   M : i32 = 25; //class W
-//const   M : i32 = 28; //class A
-//const   M : i32 = 30; //class B
-//const   M : i32 = 32; //class C
-//const   M : i32 = 36; //class D
-//const   M : i32 = 40; //class E
+
+#[cfg(feature = "W")]
+const CLASS: char = 'W';
+#[cfg(feature = "W")]
+const   M : i32 = 25; //class W
+
+#[cfg(feature = "A")]
+const CLASS: char = 'A';
+#[cfg(feature = "A")]
+const   M : i32 = 28; //class A
+
+#[cfg(feature = "B")]
+const CLASS: char = 'B';
+#[cfg(feature = "B")]
+const   M : i32 = 30; //class B
+
+#[cfg(feature = "C")]
+const CLASS: char = 'C';
+#[cfg(feature = "C")]
+const   M : i32 = 32; //class C
+
+#[cfg(feature = "D")]
+const CLASS: char = 'D';
+#[cfg(feature = "D")]
+const   M : i32 = 36; //class D
+
+#[cfg(feature = "E")]
+const CLASS: char = 'E';
+#[cfg(feature = "E")]
+const   M : i32 = 40; //class E
 
 const 	MK : i32 = 16;
 const 	MM : i32 = M - MK;
@@ -249,6 +275,8 @@ fn main() {
     
 	//mops = f64::powi(2.0, M+1)/tm/1000000.0;
     print!("\n EP Benchmark Results:\n\n");
+	println!("CLASS: {}", CLASS);
+	
 	print!(" CPU Time ={}\n", tm);
 	
     print!(" N = 2^{}\n", M);
