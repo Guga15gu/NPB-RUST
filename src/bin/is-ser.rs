@@ -108,12 +108,12 @@ pub mod randdp;
 pub mod timers;
 use crate::randdp::*;
 use crate::timers::*;
-use std::sync::Mutex;
+
 use std::time::Duration;
 use std::time::Instant;
 
 use rayon::prelude::*;
-use rayon::current_num_threads;
+
 
 
 fn create_seq(seed: f64, a:f64, v: &mut Vec<IntType>){
@@ -145,11 +145,11 @@ fn create_seq(seed: f64, a:f64, v: &mut Vec<IntType>){
 		let mut x :f64 = 0.0;
         let mut s :f64;
 
-		let i :IntType;
+		let _i :IntType;
         let k :IntType;
 
-		let k1 :IntType;
-        let mut k2 :IntType;
+		let _k1 :IntType;
+        let mut _k2 :IntType;
 		
         //pra que isso?
         let an = a;
@@ -222,11 +222,11 @@ fn find_my_seed(kn: IntType, np: IntType, nn: i64, s:f64, a: f64) -> f64{
 }
 
 fn alloc_key_buff () -> (Vec<Vec<IntType>>, Vec<IntType>) {
-    let i: IntType;
+    let _i: IntType;
 	//let num_procs = current_num_threads();
     let num_procs = 1;
     
-    let mut bucket_size: Vec<Vec<IntType>> = vec![vec![0;NUM_BUCKETS as usize]; num_procs];
+    let bucket_size: Vec<Vec<IntType>> = vec![vec![0;NUM_BUCKETS as usize]; num_procs];
     
     /*
     let mut bucket_size: Vec<&mut Vec<IntType>> = Vec::new();
@@ -236,7 +236,7 @@ fn alloc_key_buff () -> (Vec<Vec<IntType>>, Vec<IntType>) {
         bucket_size.push(&mut vec_temp);
     }
     */
-    let mut key_buff2: Vec<IntType> = vec![0;NUM_KEYS as usize];
+    let key_buff2: Vec<IntType> = vec![0;NUM_KEYS as usize];
 
     /*
     #pragma omp parallel for
@@ -253,15 +253,15 @@ fn full_verify(bucket_ptrs: &mut Vec<IntType>,
     key_buff_ptr_global: &mut Vec<IntType>,
     key_buff2: &Vec<IntType>) {
     
-    let i :IntType;
+    let _i :IntType;
     let mut j :IntType;
 
     let mut k :IntType;
     let mut k1 :IntType;
-    let k2 :IntType;
+    let _k2 :IntType;
 
-    let myid :usize = 0;
-    let num_procs :usize = 1;
+    let _myid :usize = 0;
+    let _num_procs :usize = 1;
 
     //#pragma omp parallel for private(i,j,k,k1) schedule(dynamic)
     for j in 0..NUM_BUCKETS as usize{
@@ -306,10 +306,10 @@ fn rank<'a> (iteration: IntType,
         test_rank_array: [IntType; 5],
         key_buff_ptr_global: &mut Vec<IntType>) -> IntType {
             
-    let i :IntType;
+    let _i :IntType;
     let mut k :IntType;
 
-    let mut key_buff_ptr: &mut Vec<IntType>;
+    let key_buff_ptr: &mut Vec<IntType>;
     //let mut key_buff_ptr2: &mut Vec<IntType>;
 
     let shift:IntType=MAX_KEY_LOG_2-NUM_BUCKETS_LOG_2;
@@ -551,7 +551,7 @@ fn main() {
     let mut key_buff1: Vec<IntType> = vec![0; MAX_KEY as usize];
     let mut key_buff2: Vec<IntType> = vec![0; SIZE_OF_BUFFERS as usize];
     let mut partial_verify_vals: Vec<IntType> = vec![0; TEST_ARRAY_SIZE as usize];
-    let mut key_buff1_aptr: Vec<IntType>;
+    let mut _key_buff1_aptr: Vec<IntType>;
 
     let mut bucket_ptrs:Vec<IntType> = vec![0; NUM_BUCKETS as usize];
     let mut bucket_size: Vec<Vec<IntType>>;
