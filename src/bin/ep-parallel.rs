@@ -1,5 +1,12 @@
 ///M from CLASS - npbparams
-const   M : i32 = 24;
+const   M : i32 = 24; //class S
+//const   M : i32 = 25; //class W
+//const   M : i32 = 28; //class A
+//const   M : i32 = 30; //class B
+//const   M : i32 = 32; //class C
+//const   M : i32 = 36; //class D
+//const   M : i32 = 40; //class E
+
 const 	MK : i32 = 16;
 const 	MM : i32 = M - MK;
 const 	NN : i32= 1 << MM;
