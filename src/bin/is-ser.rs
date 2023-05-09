@@ -5,84 +5,86 @@ const T_TOTAL_EXECUTION :u32 = 3;
 
 const USE_BUCKETS       :bool = true;
 
-//#[cfg (not(CLASS))]
-//const CLASS :String = "S".to_string();
-/* 
-#[cfg(feature = "class_S")]
-const TOTAL_KEYS_LOG_2:       i32 = 16;
-#[cfg(feature = "class_S")]
-const MAX_KEY_LOG_2:          i32 = 11;
-#[cfg(feature = "class_S")]
-const NUM_BUCKETS_LOG_2:      i32 = 9;
-#[cfg(feature = "class_S")]
-const TOTAL_KEYS: i32 = 1 << TOTAL_KEYS_LOG_2;
-
-#[cfg(feature = "class_W")]
-const TOTAL_KEYS_LOG_2:       i32 = 20;
-#[cfg(feature = "class_W")]
-const MAX_KEY_LOG_2:          i32 = 16;
-#[cfg(feature = "class_W")]
-const NUM_BUCKETS_LOG_2:      i32 = 10;
-#[cfg(feature = "class_W")]
-const TOTAL_KEYS: i32 = 1 << TOTAL_KEYS_LOG_2;
-
-#[cfg(feature = "class_A")]
-const TOTAL_KEYS_LOG_2:       i32 = 23;
-#[cfg(feature = "class_A")]
-const MAX_KEY_LOG_2:          i32 = 19;
-#[cfg(feature = "class_A")]
-const NUM_BUCKETS_LOG_2:      i32 = 10;
-#[cfg(feature = "class_A")]
-const TOTAL_KEYS: i32 = 1 << TOTAL_KEYS_LOG_2;
-
-#[cfg(feature = "class_B")]
-const TOTAL_KEYS_LOG_2:       i32 = 25;
-#[cfg(feature = "class_B")]
-const MAX_KEY_LOG_2:          i32 = 21;
-#[cfg(feature = "class_B")]
-const NUM_BUCKETS_LOG_2:      i32 = 10;
-#[cfg(feature = "class_B")]
-const TOTAL_KEYS: i32 = 1 << TOTAL_KEYS_LOG_2;
-
-#[cfg(feature = "class_C")]
-const TOTAL_KEYS_LOG_2:       i32 = 27;
-#[cfg(feature = "class_C")]
-const MAX_KEY_LOG_2:          i32 = 23;
-#[cfg(feature = "class_C")]
-const NUM_BUCKETS_LOG_2:      i32 = 10;
-#[cfg(feature = "class_C")]
-const TOTAL_KEYS: i32 = 1 << TOTAL_KEYS_LOG_2;
-
-#[cfg(feature = "class_D")]
-const TOTAL_KEYS_LOG_2:       i32 = 31;
-#[cfg(feature = "class_D")]
-const MAX_KEY_LOG_2:          i32 = 27;
-#[cfg(feature = "class_D")]
-const NUM_BUCKETS_LOG_2:      i32 = 10;
-#[cfg(feature = "class_D")]
-const TOTAL_KEYS: i64 = 1L << TOTAL_KEYS_LOG_2;
-
-#[cfg(feature = "CLASS")]
-const MAX_KEY:                  i32 = 1 << MAX_KEY_LOG_2;
-#[cfg(feature = "CLASS")]
-const NUM_BUCKETS:              i32 = 1 << NUM_BUCKETS_LOG_2;
-#[cfg(feature = "CLASS")]
-const NUM_KEYS:                 i32 = TOTAL_KEYS;
-#[cfg(feature = "CLASS")]
-const SIZE_OF_BUFFERS:          i32 = NUM_KEYS;
-*/
+///* 
+#[cfg(feature = "S")]
 const CLASS: char = 'S';
-const TOTAL_KEYS_LOG_2:       i32 = 16;
-const MAX_KEY_LOG_2:          i32 = 11;
-const NUM_BUCKETS_LOG_2:      i32 = 9;
-const TOTAL_KEYS: i32 = 1 << TOTAL_KEYS_LOG_2;
-const MAX_ITERATIONS:i32 = 10;
-const TEST_ARRAY_SIZE:i32 = 5;
+#[cfg(feature = "S")]
+const TOTAL_KEYS_LOG_2:       IntType = 16;
+#[cfg(feature = "S")]
+const MAX_KEY_LOG_2:          IntType = 11;
+#[cfg(feature = "S")]
+const NUM_BUCKETS_LOG_2:      IntType = 9;
+#[cfg(feature = "S")]
+const TOTAL_KEYS: IntType = 1 << TOTAL_KEYS_LOG_2;
 
-const MAX_KEY:                  i32 = 1 << MAX_KEY_LOG_2;
-const NUM_BUCKETS:              i32 = 1 << NUM_BUCKETS_LOG_2;
-const NUM_KEYS:                 i32 = TOTAL_KEYS;
-const SIZE_OF_BUFFERS:          i32 = NUM_KEYS;
+#[cfg(feature = "W")]
+const CLASS: char = 'W';
+#[cfg(feature = "W")]
+const TOTAL_KEYS_LOG_2:       IntType = 20;
+#[cfg(feature = "W")]
+const MAX_KEY_LOG_2:          IntType = 16;
+#[cfg(feature = "W")]
+const NUM_BUCKETS_LOG_2:      IntType = 10;
+#[cfg(feature = "W")]
+const TOTAL_KEYS: IntType = 1 << TOTAL_KEYS_LOG_2;
+
+#[cfg(feature = "A")]
+const CLASS: char = 'A';
+#[cfg(feature = "A")]
+const TOTAL_KEYS_LOG_2:       IntType = 23;
+#[cfg(feature = "A")]
+const MAX_KEY_LOG_2:          IntType = 19;
+#[cfg(feature = "A")]
+const NUM_BUCKETS_LOG_2:      IntType = 10;
+#[cfg(feature = "A")]
+const TOTAL_KEYS: IntType = 1 << TOTAL_KEYS_LOG_2;
+
+#[cfg(feature = "B")]
+const CLASS: char = 'B';
+#[cfg(feature = "B")]
+const TOTAL_KEYS_LOG_2:       IntType = 25;
+#[cfg(feature = "B")]
+const MAX_KEY_LOG_2:          IntType = 21;
+#[cfg(feature = "B")]
+const NUM_BUCKETS_LOG_2:      IntType = 10;
+#[cfg(feature = "B")]
+const TOTAL_KEYS: IntType = 1 << TOTAL_KEYS_LOG_2;
+
+#[cfg(feature = "C")]
+const CLASS: char = 'C';
+#[cfg(feature = "C")]
+const TOTAL_KEYS_LOG_2:       IntType = 27;
+#[cfg(feature = "C")]
+const MAX_KEY_LOG_2:          IntType = 23;
+#[cfg(feature = "C")]
+const NUM_BUCKETS_LOG_2:      IntType = 10;
+#[cfg(feature = "C")]
+const TOTAL_KEYS: IntType = 1 << TOTAL_KEYS_LOG_2;
+
+#[cfg(feature = "D")]
+const CLASS: char = 'D';
+#[cfg(feature = "D")]
+const TOTAL_KEYS_LOG_2:       IntType = 31;
+#[cfg(feature = "D")]
+const MAX_KEY_LOG_2:          IntType = 27;
+#[cfg(feature = "D")]
+const NUM_BUCKETS_LOG_2:      IntType = 10;
+#[cfg(feature = "D")]
+const TOTAL_KEYS: i64 = 1 << TOTAL_KEYS_LOG_2;
+
+#[cfg(feature = "D")]
+type IntType = i64;
+#[cfg(not(feature = "D"))]
+type IntType = i32;
+
+const MAX_KEY:                  IntType = 1 << MAX_KEY_LOG_2;
+const NUM_BUCKETS:              IntType = 1 << NUM_BUCKETS_LOG_2;
+const NUM_KEYS:                 IntType = TOTAL_KEYS;
+const SIZE_OF_BUFFERS:          IntType = NUM_KEYS;
+
+
+const MAX_ITERATIONS:IntType = 10;
+const TEST_ARRAY_SIZE:IntType = 5;
 
 const S_test_index_array : [IntType; 5] = [48427,17148,23627,62548,4431];
 const S_test_rank_array : [IntType; 5] = [0,18,346,64917,65463];
@@ -102,11 +104,6 @@ const C_test_rank_array : [IntType; 5] = [61147,882988,266290,133997595,13352589
 const D_test_index_array : [IntType; 5] = [1317351170,995930646,1157283250,1503301535,1453734525];
 const D_test_rank_array : [IntType; 5] = [1,36538729,1978098519,2145192618,2147425337];
 
-#[cfg(CLASS = "D")]
-type IntType = i64;
-#[cfg(not(CLASS = "D"))]
-type IntType = i32;
-
 pub mod randdp;
 pub mod timers;
 use crate::randdp::*;
@@ -122,7 +119,7 @@ use rayon::current_num_threads;
 fn create_seq(seed: f64, a:f64, v: &mut Vec<IntType>){
 
     //let num_threads = current_num_threads();
-    //let num_procs = num_threads as i32;
+    //let num_procs = num_threads as IntType;
     let num_procs = 1;
     let myid = 0;
     //Aqui irei apenas dividir o vetor em um pra cada thread,
@@ -140,7 +137,7 @@ fn create_seq(seed: f64, a:f64, v: &mut Vec<IntType>){
     } 
     */
     //let key_arrays = v.chunks_mut(num_threads);
-    //let ideia : Vec<i32> = (0..num_threads as i32).collect();
+    //let ideia : Vec<IntType> = (0..num_threads as IntType).collect();
 
 	//let iterator = v.par_chunks_mut(mq as usize).enumerate().for_each(| (myid, key_array)|
     //#pragma omp parallel
@@ -158,7 +155,7 @@ fn create_seq(seed: f64, a:f64, v: &mut Vec<IntType>){
         let an = a;
 		
         
-		s = find_my_seed( myid as i32, 
+		s = find_my_seed( myid as IntType, 
 				num_procs,
 	            4*(NUM_KEYS as i64),
 				seed,
@@ -176,10 +173,10 @@ fn create_seq(seed: f64, a:f64, v: &mut Vec<IntType>){
 			x += randlc(&mut s, an);
             //println!("{} x", x);
             //println!("{} k", k);
-            //println!("{} k*x", ((k as f64) * x ) as i32);
-            *pos = ((k as f64) * x ) as i32;
+            //println!("{} k*x", ((k as f64) * x ) as IntType);
+            *pos = ((k as f64) * x ) as IntType;
             //println!("{} key_array", *pos);
-			//key_array[i as usize] = k * x as i32;
+			//key_array[i as usize] = k * x as IntType;
         });
 			
 
@@ -187,7 +184,7 @@ fn create_seq(seed: f64, a:f64, v: &mut Vec<IntType>){
     
 }
 
-fn find_my_seed(kn: i32, np: i32, nn: i64, s:f64, a: f64) -> f64{
+fn find_my_seed(kn: IntType, np: IntType, nn: i64, s:f64, a: f64) -> f64{
     let mut t1 :f64;
     let mut t2 :f64;
     let mq :i64;
@@ -252,7 +249,7 @@ fn alloc_key_buff () -> (Vec<Vec<IntType>>, Vec<IntType>) {
 
 fn full_verify(bucket_ptrs: &mut Vec<IntType>, 
     key_array: &mut Vec<IntType>, 
-    passed_verification: &mut i32,
+    passed_verification: &mut IntType,
     key_buff_ptr_global: &mut Vec<IntType>,
     key_buff2: &Vec<IntType>) {
     
@@ -298,7 +295,7 @@ fn full_verify(bucket_ptrs: &mut Vec<IntType>,
 
 }
 
-fn rank<'a> (iteration: i32, 
+fn rank<'a> (iteration: IntType, 
         key_array: &mut Vec<IntType>, 
         partial_verify_vals: &mut Vec<IntType>,
         key_buff2: &mut Vec<IntType>,
@@ -307,7 +304,7 @@ fn rank<'a> (iteration: i32,
         bucket_ptrs: &mut Vec<IntType>,
         test_index_array: [IntType; 5],
         test_rank_array: [IntType; 5],
-        key_buff_ptr_global: &mut Vec<IntType>) -> i32 {
+        key_buff_ptr_global: &mut Vec<IntType>) -> IntType {
             
     let i :IntType;
     let mut k :IntType;
@@ -315,7 +312,7 @@ fn rank<'a> (iteration: i32,
     let mut key_buff_ptr: &mut Vec<IntType>;
     //let mut key_buff_ptr2: &mut Vec<IntType>;
 
-    let shift:i32=MAX_KEY_LOG_2-NUM_BUCKETS_LOG_2;
+    let shift:IntType=MAX_KEY_LOG_2-NUM_BUCKETS_LOG_2;
 
     let num_bucket_keys:IntType= 1<<shift;
 
@@ -556,11 +553,11 @@ fn main() {
     let mut partial_verify_vals: Vec<IntType> = vec![0; TEST_ARRAY_SIZE as usize];
     let mut key_buff1_aptr: Vec<IntType>;
 
-    let mut bucket_ptrs = vec![0; NUM_BUCKETS as usize];
-    let mut bucket_size: Vec<Vec<i32>>;
+    let mut bucket_ptrs:Vec<IntType> = vec![0; NUM_BUCKETS as usize];
+    let mut bucket_size: Vec<Vec<IntType>>;
 
     let mut key_buff_ptr_global: Vec<IntType> = vec![];
-    let mut passed_verification: i32 = 0;
+    let mut passed_verification: IntType = 0;
 
     let mut iteration;
 
@@ -568,6 +565,7 @@ fn main() {
     let mut elapsed: [Duration; 64] = [Duration::ZERO; 64];
     let tm: f64;
 
+    println!("CLASS: {}", CLASS);
     println!("SIZE_OF_BUFFERS: {}", SIZE_OF_BUFFERS);
     println!("MAX_KEY: {}", MAX_KEY);
     println!("NUM_BUCKETS: {}", NUM_BUCKETS);
